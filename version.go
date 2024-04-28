@@ -47,6 +47,24 @@ type AppPackage struct {
 	Url  string `json:"browser_download_url"`
 }
 
+func (v Versioning) UpdateVersion(now string) {
+	info := v.GetLatestReleaseVersion()
+	if info == nil {
+		log.Println("[Update] no releases info obtained")
+		return
+	}
+	if info.Version == now {
+		log.Println("[Update] the current version is up to date")
+		return
+	}
+	state := v.DownloadNewVersion()
+	if !state {
+		log.Println("[Update] failed to download")
+		return
+	}
+	v.RestartWithSystemd()
+}
+
 // Get Latest Release Version
 func (v Versioning) GetLatestReleaseVersion() *VersionInfo {
 	resp, err := http.Get("https://api.github.com/repos/" + v.Author + "/" + v.Name + "/releases/latest")
