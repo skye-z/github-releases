@@ -5,7 +5,7 @@ BetaX Harbor
 Copyright © 2024 SkyeZhang <skai-zhang@hotmail.com>
 */
 
-package main
+package githubreleases
 
 import (
 	"encoding/json"
