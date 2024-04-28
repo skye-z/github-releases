@@ -90,7 +90,7 @@ func (v Versioning) GetLatestReleaseVersion() *VersionInfo {
 func (v Versioning) DownloadNewVersion() bool {
 	info := v.GetLatestReleaseVersion()
 	list := info.Package
-	name := fmt.Sprintf("harbor_%s_%s", runtime.GOOS, runtime.GOARCH)
+	name := fmt.Sprintf(v.Name+"_%s_%s", runtime.GOOS, runtime.GOARCH)
 	url := ""
 	for _, value := range list {
 		if value.Name == name {
@@ -119,7 +119,7 @@ func (v Versioning) DownloadNewVersion() bool {
 		return false
 	}
 	log.Println("[Update] apply update")
-	if err := os.Rename("update.cache", "harbor"); err != nil {
+	if err := os.Rename("update.cache", v.Name); err != nil {
 		return false
 	}
 	return true
