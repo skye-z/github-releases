@@ -16,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 )
 
 // Versioning
@@ -105,12 +106,15 @@ func (v Versioning) DownloadNewVersion() bool {
 	}
 
 	log.Println("[Update] dwnload update file")
-	resp, err := http.Get(url)
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+	}
+	resp, err := client.Get(url)
 	if err != nil {
 		if v.Proxy == "" {
 			return false
 		}
-		resp, err = http.Get(v.Proxy + url)
+		resp, err = client.Get(v.Proxy + url)
 		if err != nil {
 			return false
 		}
