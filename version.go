@@ -21,6 +21,8 @@ import (
 // Versioning
 type Versioning struct {
 	// Github Author
+	Proxy string
+	// Github Author
 	Author string
 	// Github Store
 	Store string
@@ -105,7 +107,13 @@ func (v Versioning) DownloadNewVersion() bool {
 	log.Println("[Update] dwnload update file")
 	resp, err := http.Get(url)
 	if err != nil {
-		return false
+		if v.Proxy == "" {
+			return false
+		}
+		resp, err = http.Get(v.Proxy + url)
+		if err != nil {
+			return false
+		}
 	}
 	defer resp.Body.Close()
 
