@@ -127,6 +127,10 @@ func (v Versioning) DownloadNewVersion() bool {
 		return false
 	}
 	log.Println("[Update] apply update")
+
+	if err := os.Chmod("update.cache", os.FileMode(0744)); err != nil {
+		return false
+	}
 	if err := os.Rename("update.cache", v.Name); err != nil {
 		return false
 	}
